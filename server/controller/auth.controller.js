@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
-const { User , validateRegisterUser } = require("../models/User");
+const { User , validateRegisterUser, validateLoginUser } = require("../models/User");
 
 
 
@@ -42,7 +42,47 @@ const registerUser = asyncHandler( async (req , res)=>{
 })
 
 
+/**
+ * @desc    Login user
+ * @route   /api/auth/login
+ * @method  POST
+ * @access  public
+ */
+const loginUser = asyncHandler(async (req ,res) => {
+    // validate credentials
+    const { error } = validateLoginUser(req.body);
+    if(error)
+    {
+        return res.status(400).json({message: error.details[0].message});
+    }
+    // check if user exists
+    const user = await User.findOne({email: req.body.email});
+    if(!user)
+    {
+        return res.status(400).json({message: "invalid email or password."});
+    }
+    // check the password
+    const matchedPassword = await bcrypt.compare(req.body.password , user.password);
+    if(!matchedPassword)
+    {
+        return res.status(400).json({message: "invalid email or password"});
+    }
+
+    
+
+    // generate token
+    const token = user.generateAuthToken();
+    return res.status(200).json({
+        _id: user._id,
+        isAdmin: user.isAdmin,
+        profilePhoto: user.profilePhoto,
+        token
+    })
+});
+
+//todo sending activation email 
 
 module.exports = {
     registerUser,
+    loginUser
 }

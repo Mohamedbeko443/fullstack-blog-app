@@ -1,2 +1,2 @@
 
-# a fullstack blog web app
+# a fullstack blog application

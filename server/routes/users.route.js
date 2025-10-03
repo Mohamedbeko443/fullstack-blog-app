@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { getAllUsers, getUser, updateUser, getUsersCount, profilePhotoUpload } = require("../controller/users.controller");
-const {  verifyAdmins, verifyUsers, verifyToken } = require("../middlewares/verifyToken");
+const { getAllUsers, getUser, updateUser, getUsersCount, profilePhotoUpload, deleteProfile } = require("../controller/users.controller");
+const {  verifyAdmins, verifyUsers, verifyToken, verifyAdminsAndUsers } = require("../middlewares/verifyToken");
 const validateObjectId = require("../middlewares/validateObjectId");
 const photoUpload = require("../middlewares/photoUpload");
 
@@ -15,6 +15,7 @@ router.route("/profile")
 router.route("/profile/:id")
     .get(validateObjectId , getUser)
     .put(validateObjectId , verifyUsers , updateUser)
+    .delete(validateObjectId , verifyAdminsAndUsers , deleteProfile )
 
 
 // /api/users/profile

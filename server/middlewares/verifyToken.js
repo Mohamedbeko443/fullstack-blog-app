@@ -47,8 +47,19 @@ function verifyUsers(req , res, next)
 }
 
 
+function verifyAdminsAndUsers(req , res , next){
+    verifyToken(req, res , ()=>{
+        if(req.user.id === req.params.id || req.user.isAdmin)
+        {
+            return next();
+        }
+        return res.status(401).json({message: "NOT allowed, only user himself or admins."})
+    })
+}
+
 module.exports = {
     verifyToken,
     verifyAdmins,
-    verifyUsers
+    verifyUsers,
+    verifyAdminsAndUsers
 }

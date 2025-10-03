@@ -118,15 +118,43 @@ const profilePhotoUpload = asyncHandler(async (req,res)=> {
 
     //remove image from server
     fs.unlinkSync(imagePath);
-    
+
     return res.status(200).json({message: "your photo uploaded successfully.", profilePhoto: {url: result.secure_url}});
 })
 
 
+
+/**
+ * @desc    delete profile
+ * @route   /api/users/profile/:id
+ * @method  DELETE
+ * @access  private (users & admins)
+ */
+    const deleteProfile = asyncHandler(async (req , res) => {
+        const user = await User.findById(req.params.id);
+        if(!user)
+        {
+            return res.status(404).json({message: "user not found."});
+        }
+
+        if(user.profilePhoto.publicId !== null)
+        {
+            await cloudinaryRemoveImage(user.profilePhoto.publicId);
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+
+        return res.status(200).json({message: "your profile has been deleted successfully."});
+
+    })
+
+
+    
 module.exports = {
     getAllUsers,
     getUser,
     updateUser,
     getUsersCount,
-    profilePhotoUpload
+    profilePhotoUpload,
+    deleteProfile
 }

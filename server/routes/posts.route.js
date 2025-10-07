@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const photoUpload = require("../middlewares/photoUpload");
 const { verifyToken } = require("../middlewares/verifyToken");
-const { createPost, getAllPosts , getPost, getPostsCount  } = require("../controller/post.controller");
+const { createPost, getAllPosts , getPost, getPostsCount, deletePost  } = require("../controller/post.controller");
 const  validateObjectId  = require("../middlewares/validateObjectId");
 
 
@@ -16,6 +16,7 @@ router.route("/count")
 
 router.route("/:id")
     .get(validateObjectId , getPost)
+    .delete(validateObjectId , verifyToken , deletePost);
 
 
 

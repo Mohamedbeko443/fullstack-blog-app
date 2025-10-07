@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const asyncHandler = require("express-async-handler");
 const { Post , validateCreatePost , validateUpdatePost } = require("../models/Post");
-const { cloudinaryUploadImage } = require("../utils/cloudinary");
+const { cloudinaryUploadImage, cloudinaryRemoveImage } = require("../utils/cloudinary");
 
 
 /**
@@ -107,9 +107,36 @@ const getPostsCount = asyncHandler(async (req , res) => {
     return res.status(200).json({count});
 })
 
+
+
+/**
+ * @desc     delete post
+ * @route   /api/posts/:id
+ * @method    DELETE
+ * @access   private    (admin or owner of the post)
+ */
+const deletePost = asyncHandler(async (req , res) => {
+    const post = await Post.findById(req.params.id);
+    if(!post)
+    {
+        return res.status(404).json({message: "post NOT found."});
+    }
+
+    if(req.user.isAdmin || req.user.id === post.user.toString())
+    {
+        await Post.findByIdAndDelete(req.params.id);
+        await cloudinaryRemoveImage(post.image.publicId);
+        //todo delete all comments
+        return res.status(200).json({message: "post has been deleted successfully."})
+    }
+    return res.status(403).json({message: "access denied, forbidden."});
+})
+
+
 module.exports = {
     createPost,
     getAllPosts,
     getPost,
-    getPostsCount
+    getPostsCount,
+    deletePost
 }

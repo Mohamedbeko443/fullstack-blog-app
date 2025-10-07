@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const photoUpload = require("../middlewares/photoUpload");
 const { verifyToken } = require("../middlewares/verifyToken");
-const { createPost, getAllPosts , getPost, getPostsCount, deletePost, updatePost, updatePostImage  } = require("../controller/post.controller");
+const { createPost, getAllPosts , getPost, getPostsCount, deletePost, updatePost, updatePostImage, toggleLike  } = require("../controller/post.controller");
 const  validateObjectId  = require("../middlewares/validateObjectId");
 
 
@@ -22,6 +22,10 @@ router.route("/:id")
 
     router.route("/upload-image/:id")
         .put(validateObjectId , verifyToken , photoUpload.single("image") , updatePostImage)
+
+
+    router.route("/like/:id")
+        .put(validateObjectId , verifyToken , toggleLike)
 
 
 module.exports = router;

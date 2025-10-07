@@ -5,6 +5,7 @@ const { Post , validateCreatePost , validateUpdatePost } = require("../models/Po
 const { cloudinaryUploadImage, cloudinaryRemoveImage } = require("../utils/cloudinary");
 
 
+
 /**
  * @desc    create new post
  * @route   /api/posts
@@ -133,10 +134,106 @@ const deletePost = asyncHandler(async (req , res) => {
 })
 
 
+
+/**
+ * @desc     update post
+ * @route   /api/posts/:id
+ * @method    PUT
+ * @access   private    (owner of the post)
+ */
+const updatePost = asyncHandler(async (req , res) => {
+    //validation 
+    const { error } = validateUpdatePost(req.body);
+    if(error)
+    {
+        return res.status(400).json({message: error.details[0].message});
+    }
+
+    // get post from db and check
+    const post = await Post.findById(req.params.id);
+    if(!post)
+    {
+        return res.status(404).json({message: "post NOT found."});
+    }
+
+    // check if this post belongs to the user   [AUTHORIZATION]
+    if(req.user.id !== post.user.toString())
+    {
+        return res.status(403).json({message: "access denied, you are not allowed"});
+    }
+
+    // update the post 
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id , {
+        $set: {
+            title: req.body.title,
+            description: req.body.description,
+            category: req.body.category
+        }
+    },{new: true}).populate("user" , ["-password"]);
+
+    // send res to client
+    return res.status(200).json(updatedPost);
+})
+
+
+
+/**
+ * @desc     update post image
+ * @route   /api/posts/upload-image/:id
+ * @method    PUT
+ * @access   private    (owner of the post)
+ */
+const updatePostImage = asyncHandler(async (req , res) => {
+    //validate image 
+    if(!req.file)
+    {
+        return res.status(400).json({message: "NO image provided."});
+    }
+
+    // get post from db and check
+    const post = await Post.findById(req.params.id);
+    if(!post)
+    {
+        return res.status(404).json({message: "post NOT found."});
+    }
+
+    // check if this post belongs to the user   [AUTHORIZATION]
+    if(req.user.id !== post.user.toString())
+    {
+        return res.status(403).json({message: "access denied, you are not allowed"});
+    }
+
+    // update the post image
+        // remove the old image
+        await cloudinaryRemoveImage(post.image.publicId);
+
+        // upload the new image and save to db
+        const imagePath = path.join(__dirname , `../images/${req.file.filename}`);
+        const result = await cloudinaryUploadImage(imagePath);
+
+        const updatedPost = await Post.findByIdAndUpdate(req.params.id , {
+        $set: {
+            image: {
+                url: result.secure_url,
+                publicId: result.public_id
+            }
+        }
+    },{new: true}).populate("user" , ["-password"]);
+
+    fs.unlinkSync(imagePath);
+
+    // send res to client
+    return res.status(200).json(updatedPost);
+})
+
+
+
 module.exports = {
     createPost,
     getAllPosts,
     getPost,
     getPostsCount,
-    deletePost
+    deletePost,
+    updatePost,
+    updatePostImage
 }

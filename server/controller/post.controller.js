@@ -3,7 +3,7 @@ const path = require("path");
 const asyncHandler = require("express-async-handler");
 const { Post , validateCreatePost , validateUpdatePost } = require("../models/Post");
 const { cloudinaryUploadImage, cloudinaryRemoveImage } = require("../utils/cloudinary");
-
+const { Comment } = require("../models/Comment");
 
 
 /**
@@ -130,7 +130,8 @@ const deletePost = asyncHandler(async (req , res) => {
     {
         await Post.findByIdAndDelete(req.params.id);
         await cloudinaryRemoveImage(post.image.publicId);
-        //todo delete all comments
+        await Comment.deleteMany({postId: post._id});
+
         return res.status(200).json({message: "post has been deleted successfully."})
     }
     return res.status(403).json({message: "access denied, forbidden."});

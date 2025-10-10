@@ -2,8 +2,10 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { User , validateUpdateUser } = require("../models/User");
 const path = require("path");
-const { cloudinaryUploadImage , cloudinaryRemoveImage } = require("../utils/cloudinary");
-const fs = require("fs")
+const { cloudinaryUploadImage , cloudinaryRemoveImage, cloudinaryRemoveImages } = require("../utils/cloudinary");
+const fs = require("fs");
+const { Comment } = require("../models/Comment");
+const { Post } = require("../models/Post");
 
 
 
@@ -137,10 +139,20 @@ const profilePhotoUpload = asyncHandler(async (req,res)=> {
             return res.status(404).json({message: "user not found."});
         }
 
+        const posts = await Post.find({user: user._id});
+        const publicIds = posts?.map(post => post.image.publicId);
+        if(publicIds?.length > 0) 
+        {
+            await cloudinaryRemoveImages(publicIds);
+        }
+
         if(user.profilePhoto.publicId !== null)
         {
             await cloudinaryRemoveImage(user.profilePhoto.publicId);
         }
+
+        await Post.deleteMany({user: user._id});
+        await Comment.deleteMany({user: user._id});
 
         await User.findByIdAndDelete(req.params.id);
 

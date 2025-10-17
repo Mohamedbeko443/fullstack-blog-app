@@ -1,16 +1,17 @@
 import { ArrowRight, UserPlus } from 'lucide-react'
+import { Link } from "react-router-dom"
 
 export default function HeaderRight() {
     return (
         <div className="header-right">
-            <button className="header-right-link">
+            <Link to="/login" className="header-right-link">
                 <ArrowRight className='icon' />
                 <span>Login</span>
-            </button>
-            <button className="header-right-link">
+            </Link>
+            <Link to="/register" className="header-right-link">
                 <UserPlus className='icon' />
                 <span>Register</span>
-            </button>
+            </Link>
         </div>
     )
 }

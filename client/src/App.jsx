@@ -6,9 +6,9 @@ import Register from './pages/forms/Register';
 import Posts from './pages/posts/Posts';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import CreatePost from './pages/create-post/CreatePost';
+import Footer from "./components/footer/Footer";
 
 function App() {
-  
 
   return (
     <BrowserRouter>
@@ -22,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<AdminDashboard/>} />
         <Route path="*" element={<h1>NOT found!</h1>} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }

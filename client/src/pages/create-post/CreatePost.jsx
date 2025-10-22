@@ -1,6 +1,6 @@
 import { useState } from "react"
 import "./create-post.css";
-import {toast , ToastContainer} from "react-toastify"
+import {toast } from "react-toastify"
 
 
 export default function CreatePost() {
@@ -34,7 +34,6 @@ export default function CreatePost() {
 
   return (
     <section className=' create-post'>
-      <ToastContainer theme="colored" position="top-center" />
       <h1 className="create-post-title">
         Create New Post
       </h1>

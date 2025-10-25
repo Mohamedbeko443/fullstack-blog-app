@@ -4,11 +4,18 @@ import { ThumbsUp , Pencil , Trash2  , Image   } from 'lucide-react';
 import "./post-details.css"
 import { useEffect , useState } from "react";
 import  { toast  } from "react-toastify"
+import AddComment from './../../components/comments/AddComment';
+import CommentList from './../../components/comments/CommentList';
+import Swal from "sweetalert2";
+
+import UpdatePostModal from './UpdatePostModal';
 
 
 export default function PostDetails() {
+
     const { id } = useParams();
     const [file , setFile] = useState(null);
+    const [open , setOpen] = useState(false);
 
     const post = posts.find(post => post._id === parseInt(id));
 
@@ -25,6 +32,28 @@ export default function PostDetails() {
 
 
         alert("image uploaded successfully")
+    }
+
+
+    function deletePostHandler()
+    {
+        Swal.fire({
+            title: "Are you sure",
+            text: "once deleted, you will not be able to recover this",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Post has been deleted.',
+                    'success'
+                );
+            }
+        })
     }
 
     return (
@@ -65,18 +94,16 @@ export default function PostDetails() {
                     <small>{post.likes.length} likes</small>
                 </div>
 
-                <div>
-                        <Pencil />
-                        <Trash2 />
+                <div style={{ display:"flex" , padding: '7px', gap: "12px" }} >
+                        <Pencil cursor={"pointer"} onClick={() => setOpen(true)}  color="yellowgreen" />
+                        <Trash2 color="red" cursor={"pointer"} onClick={deletePostHandler} />
                 </div>
             </div>
 
-            <div>
-                add comment form
-            </div>
+            <AddComment/>
+            <CommentList/>
 
-            <div>comment list</div>
-
+            {open && <UpdatePostModal post={post} setOpen={setOpen} />}
         </section>
     )
 }

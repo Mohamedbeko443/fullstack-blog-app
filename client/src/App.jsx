@@ -11,6 +11,10 @@ import PostDetails from "./pages/post-details/PostDetails";
 import { ToastContainer } from "react-toastify";
 import Category from './pages/category/Category';
 import Profile from "./pages/profile/Profile";
+import UsersTable from './pages/admin/UsersTable';
+import PostsTable from './pages/admin/PostsTable';
+import CategoriesTable from './pages/admin/CategoriesTable';
+import CommentsTable from './pages/admin/CommentsTable';
 
 function App() {
 
@@ -24,7 +28,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:id" element={<Profile />} />
 
-        
+
         <Route path="posts">
           <Route index element={<Posts />} />
           <Route path="create-post" element={<CreatePost />} />
@@ -32,8 +36,16 @@ function App() {
           <Route path="categories/:category" element={<Category />} />
         </Route>
 
+        <Route path="admin-dashboard" >
+          <Route index element={<AdminDashboard />} />
+          <Route path="users-table" element={<UsersTable />} />
+          <Route path="posts-table" element={<PostsTable />} />
+          <Route path="categories-table" element={<CategoriesTable />} />
+          <Route path="comments-table" element={<CommentsTable />} />
+        </Route>
 
-        <Route path="/dashboard" element={<AdminDashboard />} />
+
+
         <Route path="*" element={<h1>NOT found!</h1>} />
       </Routes>
       <Footer />

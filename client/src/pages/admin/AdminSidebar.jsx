@@ -5,7 +5,7 @@ export default function AdminSidebar() {
 
     return (
         <div className="admin-sidebar">
-            <Link to={"admin-dashboard"} className="admin-sidebar-title">
+            <Link to={"/admin-dashboard"} className="admin-sidebar-title">
                     <LayoutDashboard className='icon' />
                     Dashboard
             </Link>

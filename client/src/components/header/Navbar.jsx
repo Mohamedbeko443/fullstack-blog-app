@@ -20,7 +20,7 @@ export default function Navbar({ toggle, setToggle }) {
         },
         {
             name: "Admin Dashboard",
-            to: "/dashboard",
+            to: "/admin-dashboard",
             icon: <ChartColumn/>
         },
     ]

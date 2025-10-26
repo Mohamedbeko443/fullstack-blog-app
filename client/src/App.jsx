@@ -15,6 +15,8 @@ import UsersTable from './pages/admin/UsersTable';
 import PostsTable from './pages/admin/PostsTable';
 import CategoriesTable from './pages/admin/CategoriesTable';
 import CommentsTable from './pages/admin/CommentsTable';
+import ForgotPassword from './pages/forms/ForgotPassword';
+import ResetPassword from './pages/forms/ResetPassword';
 
 function App() {
 
@@ -26,6 +28,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+
         <Route path="/profile/:id" element={<Profile />} />
 
 

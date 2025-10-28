@@ -17,6 +17,7 @@ import CategoriesTable from './pages/admin/CategoriesTable';
 import CommentsTable from './pages/admin/CommentsTable';
 import ForgotPassword from './pages/forms/ForgotPassword';
 import ResetPassword from './pages/forms/ResetPassword';
+import NotFound from './pages/not-found/NotFound';
 
 function App() {
 
@@ -50,9 +51,8 @@ function App() {
           <Route path="comments-table" element={<CommentsTable />} />
         </Route>
 
+        <Route path="*" element={<NotFound/>} />
 
-
-        <Route path="*" element={<h1>NOT found!</h1>} />
       </Routes>
       <Footer />
     </BrowserRouter>

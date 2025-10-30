@@ -4,9 +4,6 @@ import { Link } from "react-router-dom"
 
 export default function Navbar({ toggle, setToggle }) {
     const { user } = useSelector(store => store.auth);
-    // non logged in => home , posts
-    // logged in and admin => home , posts , dashboard 
-    // logged in and   NOT admin => home , posts , create-post 
 
     const mainLinks = [
         {

@@ -1,13 +1,18 @@
 import { useState } from "react"
 import "./form.css"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../redux/apiCalls/authApiCall";
+import Swal from "sweetalert2";
 
 
 export default function Register() {
   const [username , setUsername] = useState("");
   const [email , setEmail] = useState("");
   const [password , setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
 
   function handleSubmit(e){
@@ -17,11 +22,10 @@ export default function Register() {
     if(!email.trim()) return toast.error("email is required!");
     if(!password.trim()) return toast.error("password is required!");
 
-
-    console.log({username , email , password});
-
+    dispatch(registerUser({username , email , password}, navigate))
   }
 
+ 
 
   return (
     <section className='form-container'>

@@ -20,6 +20,27 @@ export function loginUser(user) {
     }
 }
 
+// register
+export function registerUser(user, navigate) {
+    return async (dispatch) => {
+        try{
+            const { data } = await request.post("/api/auth/register" , user);
+            dispatch(authActions.register(data.message));
+            toast.success(data.message);
+            if (navigate) {
+                navigate("/login");
+            }
+        }
+        catch(err){
+            toast.error(err.response.data.message);
+            console.log(err);
+        }
+    }
+}
+
+
+
+
 //logout
 export function logoutUser() {
     return async (dispatch) => {

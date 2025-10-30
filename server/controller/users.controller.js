@@ -28,7 +28,7 @@ const getAllUsers = asyncHandler(async (req , res) => {
  * @desc    get user profile
  * @route   /api/users/profile/:id
  * @method  GET
- * @access  private (only admin)
+ * @access  public 
  */
 const getUser = asyncHandler(async (req, res)=>{
     const user = await User.findById(req.params.id).select("-__v -password ").populate("posts");

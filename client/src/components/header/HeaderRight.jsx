@@ -1,11 +1,18 @@
 import { ArrowRight, UserPlus , CircleUserRound , ArrowLeft   } from 'lucide-react'
 import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector , useDispatch } from "react-redux"
 import { useState } from 'react';
+import { logoutUser } from '../../redux/apiCalls/authApiCall';
 
 export default function HeaderRight() {
     const { user } = useSelector(store => store.auth);
     const [dropdown , setDropdown] = useState(false);
+    const dispatch = useDispatch();
+
+    function handleLogout(){
+        setDropdown(false);
+        dispatch(logoutUser());
+    }
 
     return (
         <div className="header-right">
@@ -21,7 +28,7 @@ export default function HeaderRight() {
                                 <CircleUserRound style={{marginTop: "3px", marginRight:"5px"}} />
                                 <span>Profile</span>
                             </Link>
-                            <div className="header-dropdown-item">
+                            <div onClick={handleLogout} className="header-dropdown-item">
                                 <ArrowLeft style={{marginTop: "5px", marginRight:"5px"}} />
                                 <span>Logout</span>
                             </div>

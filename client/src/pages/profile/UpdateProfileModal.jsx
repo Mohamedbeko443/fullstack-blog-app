@@ -2,17 +2,18 @@
 import { useEffect, useState } from "react";
 import { CircleX } from 'lucide-react';
 import "./update-profile-modal.css"
+import { useDispatch } from "react-redux";
+import { updateProfile } from "../../redux/apiCalls/profileApiCall";
 
 
-const user = {
-    username: "mohamed",
-    bio: "hello guys"
-}
 
-export default function UpdateProfileModal({ setOpen }) {
-    const [username , setUsername] = useState(user.username);
-    const [bio, setBio] = useState(user.bio);
+
+export default function UpdateProfileModal({ setOpen , profile }) {
+    const [username , setUsername] = useState(profile.username);
+    const [bio, setBio] = useState(profile.bio);
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
     
 
 
@@ -41,8 +42,8 @@ export default function UpdateProfileModal({ setOpen }) {
             updatedUser.password = password;
         }
 
-        console.log(updatedUser);
-
+        dispatch(updateProfile(profile?._id , updatedUser));
+        setOpen(false);
     }
 
 
@@ -70,7 +71,7 @@ export default function UpdateProfileModal({ setOpen }) {
                 <input
                     type="password"
                     className="update-profile-input"
-                    placeholder="bio..."
+                    placeholder="password..."
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />

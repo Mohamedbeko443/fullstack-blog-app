@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import UpdateProfileModal from './UpdateProfileModal';
 import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile } from "../../redux/apiCalls/profileApiCall";
+import { getUserProfile, uploadProfilePhoto } from "../../redux/apiCalls/profileApiCall";
 import { useParams } from "react-router-dom";
 
 
@@ -18,7 +18,6 @@ export default function Profile() {
     const dispatch = useDispatch();
     const { id } = useParams();
     const { profile } = useSelector(store => store.profile);
-    console.log(profile);
 
     function handleSubmit(e)
     {
@@ -26,7 +25,9 @@ export default function Profile() {
         if(!file) return toast.warning("Please provide a photo.");
 
 
-        console.log("image has been uploaded successfully")
+        const formData = new FormData();
+        formData.append("image" , file);
+        dispatch(uploadProfilePhoto(formData));
     }
 
 
@@ -87,7 +88,7 @@ export default function Profile() {
             </div>
             <button onClick={handleDeleteAccount} className="delete-account-btn" > Delete Account </button>
 
-            {open && <UpdateProfileModal setOpen={setOpen} />}
+            {open && <UpdateProfileModal profile={profile} setOpen={setOpen} />}
         </section>
     )
 }

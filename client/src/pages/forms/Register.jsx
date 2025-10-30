@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../redux/apiCalls/authApiCall";
-import Swal from "sweetalert2";
 
 
 export default function Register() {

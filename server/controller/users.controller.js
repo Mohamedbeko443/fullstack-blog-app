@@ -92,7 +92,7 @@ const getUsersCount = asyncHandler(async (req , res) => {
  * @method  GET
  * @access  private (only logged in users)
  */
-const profilePhotoUpload = asyncHandler(async (req,res)=> {
+const profilePhotoUpload = asyncHandler(async (req,res) => {
     // validation
     if(!req.file)
     {

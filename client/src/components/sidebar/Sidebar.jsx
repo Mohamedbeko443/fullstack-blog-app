@@ -8,7 +8,7 @@ export default function Sidebar({ categories }) {
             <ul className="sidebar-links">
                 {
                     categories.map(category => (
-                        <Link key={category._id} className="sidebar-link" to={`/post/categories/${category.title}`}>{category.title}</Link>
+                        <Link key={category._id} className="sidebar-link" to={`/posts/categories/${category.title}`}>{category.title}</Link>
                     ))
                 }
             </ul>

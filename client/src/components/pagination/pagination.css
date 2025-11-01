@@ -39,3 +39,13 @@
 .page.next {
     border-radius: 0 10px 10px 0;
 }
+
+
+.active {
+    background-color: var(--gray-color);
+}
+
+
+button:disabled {
+    cursor: not-allowed;
+}

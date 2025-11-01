@@ -108,7 +108,7 @@ const getPost = asyncHandler(async (req , res) => {
  */
 const getPostsCount = asyncHandler(async (req , res) => {
     const count = await Post.countDocuments();
-    return res.status(200).json({count});
+    return res.status(200).json(count);
 })
 
 

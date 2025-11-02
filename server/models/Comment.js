@@ -31,8 +31,6 @@ const CommentSchema = new mongoose.Schema({
 const Comment = mongoose.model("Comment", CommentSchema);
 
 
-
-
 //! validations
 
 // validate create comment

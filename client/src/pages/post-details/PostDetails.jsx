@@ -1,42 +1,45 @@
 import { Link, useParams } from "react-router-dom"
-import { posts } from "../../dummyData"
-import { ThumbsUp , Pencil , Trash2  , Image   } from 'lucide-react';
+import { ThumbsUp, Pencil, Trash2, Image } from 'lucide-react';
 import "./post-details.css"
-import { useEffect , useState } from "react";
-import  { toast  } from "react-toastify"
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify"
 import AddComment from './../../components/comments/AddComment';
 import CommentList from './../../components/comments/CommentList';
 import Swal from "sweetalert2";
 
 import UpdatePostModal from './UpdatePostModal';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPostsById, toggleLikePost } from "../../redux/apiCalls/postsApiCall";
 
 
 export default function PostDetails() {
-
     const { id } = useParams();
-    const [file , setFile] = useState(null);
-    const [open , setOpen] = useState(false);
+    const [file, setFile] = useState(null);
+    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+    const { post } = useSelector(store => store.post);
+    const { user } = useSelector(store => store.auth);
 
-    const post = posts.find(post => post._id === parseInt(id));
 
-    useEffect(()=> {
-        window.scrollTo(0,0);
-    } , [])
+
+    useEffect(() => {
+        dispatch(fetchPostsById(id));
+        window.scrollTo(0, 0);
+    }, [id, dispatch])
 
 
     function handleSubmit(e) {
         e.preventDefault();
 
 
-        if(!file) return toast.warning("there is NO file")
+        if (!file) return toast.warning("there is NO file")
 
 
         alert("image uploaded successfully")
     }
 
 
-    function deletePostHandler()
-    {
+    function deletePostHandler() {
         Swal.fire({
             title: "Are you sure",
             text: "once deleted, you will not be able to recover this",
@@ -59,49 +62,55 @@ export default function PostDetails() {
     return (
         <section className='post-details'>
             <div className="post-details-image-wrapper">
-                <img src={ file ? URL.createObjectURL(file) : post.image} alt="image" className="post-details-image" />
-                <form onSubmit={handleSubmit} className="update-post-image-form">
-                    <label htmlFor="file" className="update-post-label">
-                        {/* Image icons */}
-                            <Image className="icon" />
-                        Select new image
-                    </label>
-                    <input onChange={(e) => setFile(e.target.files[0])}  style={{display: "none"}} type="file" id="file" name="file" placeholder="" />
-                    <button type="submit">upload</button>
-                </form>
+                <img src={file ? URL.createObjectURL(file) : post?.image?.url} alt="image" className="post-details-image" />
+
+                {
+                    user?._id === post?.user?._id && (
+                        <form onSubmit={handleSubmit} className="update-post-image-form">
+                            <label htmlFor="file" className="update-post-label">
+                                {/* Image icons */}
+                                <Image className="icon" />
+                                Select new image
+                            </label>
+                            <input onChange={(e) => setFile(e.target.files[0])} style={{ display: "none" }} type="file" id="file" name="file" placeholder="" />
+                            <button type="submit">upload</button>
+                        </form>
+                    )
+                }
+
             </div>
 
-            <h1 className="post-details-title">{post.title}</h1>
+            <h1 className="post-details-title">{post?.title}</h1>
             <div className="post-details-user-info">
-                <img src={post.user.image} alt="user image" className="post-details-user-image" />
+                <img src={post?.user?.profilePhoto?.url} alt="user image" className="post-details-user-image" />
                 <div className="post-details-user">
                     <strong>
-                        <Link to={"/profile/1"} >{post.user.username}</Link>
+                        <Link to={`/profile/${post?.user?._id}`} >{post?.user?.username}</Link>
                     </strong>
-                    <span>{post.createdAt}</span>
+                    <span>{new Date(post?.createdAt).toDateString()}</span>
                 </div>
             </div>
 
             <p className="post-details-description">
-                {post.description}
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, enim voluptatibus eligendi et doloribus similique praesentium, ex quisquam deleniti, aliquam repellendus! Dolor voluptates necessitatibus
-                repellat at! Eius suscipit dolor eaque?
+                {post?.description}
             </p>
 
             <div className="post-details-icon-wrapper">
-                <div>
-                    <ThumbsUp cursor={"pointer"} />
-                    <small>{post.likes.length} likes</small>
+                <div style={{ display: "flex", gap: "10px" }} >
+                    {user && ( <ThumbsUp   fill={post?.likes.includes(user?._id) ? "currentColor" : "none"} onClick={() => dispatch(toggleLikePost(post?._id))} style={{ marginTop: "2px" }} cursor={"pointer"} />)}
+                    <small>{post?.likes?.length} likes</small>
                 </div>
 
-                <div style={{ display:"flex" , padding: '7px', gap: "12px" }} >
-                        <Pencil cursor={"pointer"} onClick={() => setOpen(true)}  color="yellowgreen" />
+                {user?._id === post?.user?._id && (
+                    <div style={{ display: "flex", padding: '7px', gap: "12px" }} >
+                        <Pencil cursor={"pointer"} onClick={() => setOpen(true)} color="yellowgreen" />
                         <Trash2 color="red" cursor={"pointer"} onClick={deletePostHandler} />
-                </div>
+                    </div>
+                )}
             </div>
 
-            <AddComment/>
-            <CommentList/>
+            <AddComment />
+            <CommentList comments={post?.comments} />
 
             {open && <UpdatePostModal post={post} setOpen={setOpen} />}
         </section>

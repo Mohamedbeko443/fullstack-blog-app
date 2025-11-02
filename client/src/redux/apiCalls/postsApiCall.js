@@ -73,4 +73,34 @@ export function createPost(newPost) {
     }
 }
 
+// fetch post by id
+export function fetchPostsById(id) {
+    return async (dispatch) => {
+        try{
+            const { data } = await request.get(`/api/posts/${id}`);
+            dispatch(postActions.setPost(data));
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}
 
+// toggle like
+export function toggleLikePost(id) {
+    return async (dispatch , getState) => {
+        try{
+            const { data } = await request.put(`/api/posts/like/${id}` , {} , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token
+                }
+            });
+            dispatch(postActions.setLike(data));
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}

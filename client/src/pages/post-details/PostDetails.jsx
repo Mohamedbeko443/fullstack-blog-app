@@ -13,12 +13,12 @@ import { deletePost, fetchPostsById, toggleLikePost, updatePostImage } from "../
 
 
 export default function PostDetails() {
-    const { id } = useParams();
     const [file, setFile] = useState(null);
     const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
+    const { id } = useParams();
     const { post } = useSelector(store => store.post);
     const { user } = useSelector(store => store.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
 

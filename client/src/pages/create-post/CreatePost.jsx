@@ -4,6 +4,7 @@ import {toast } from "react-toastify"
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createPost } from "../../redux/apiCalls/postsApiCall";
+import { fetchCategories } from "../../redux/apiCalls/categoryApiCall";
 
 
 export default function CreatePost() {
@@ -11,10 +12,10 @@ export default function CreatePost() {
     const [des , setDes] = useState("");
     const [category , setCategory] = useState("");
     const [file , setFile] = useState(null);
-
+    const { loading , isPostCreated } = useSelector(store => store.post);
+    const { categories } = useSelector(store => store.category);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading , isPostCreated } = useSelector(store => store.post);
 
 
     function handleSubmit(e) {
@@ -42,6 +43,10 @@ export default function CreatePost() {
       }
     } , [navigate , isPostCreated]);
 
+    useEffect(() => {
+      dispatch(fetchCategories());
+    },[dispatch])
+
   return (
     <section className=' create-post'>
       <h1 className="create-post-title">
@@ -61,8 +66,11 @@ export default function CreatePost() {
             <option disabled value="">
               Select A Category
             </option>
-            <option value="music">Music</option>
-            <option value="coffee">Coffee</option>
+            {
+              categories.map(category => (
+                <option key={category?._id} value={category?.title}>{category?.title}</option>
+              ))
+            }
           </select>
 
           <textarea 

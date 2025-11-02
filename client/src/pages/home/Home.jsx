@@ -1,6 +1,5 @@
 import "./home.css"
 import PostList from './../../components/posts/PostList';
-import { categories } from "../../dummyData.js"
 import Sidebar from './../../components/sidebar/Sidebar';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +28,7 @@ export default function Home() {
             <div className="home-latest-posts">  Latest posts</div>
             <div className="home-container">
                 <PostList posts={posts} />
-                <Sidebar categories={categories} />
+                <Sidebar />
             </div>
             <div className="home-see-posts-link">
                 <Link to="/posts" className="home-link">

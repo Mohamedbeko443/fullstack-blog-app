@@ -149,7 +149,7 @@ export function updatePost(newPost , postId) {
 export function deletePost( postId ) {
     return async (dispatch , getState) => {
         try{
-                const { data } = await request.delete(`/api/posts/${postId}`  , {
+                await request.delete(`/api/posts/${postId}`  , {
                 headers: {
                     Authorization: "Bearer " + getState().auth.user.token,
                 }

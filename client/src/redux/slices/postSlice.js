@@ -6,7 +6,9 @@ const profileSlice = createSlice({
     initialState: {
         posts: [],
         postsCount: null,
-        postsCate: []
+        postsCate: [],
+        loading: false , 
+        isPostCreated: false
     },
     
     reducers: {
@@ -19,6 +21,19 @@ const profileSlice = createSlice({
         setPostsCate(state , action) {
             state.postsCate = action.payload
         },
+        setLoading(state){
+            state.loading = true
+        },
+        clearLoading(state){
+            state.loading = false;
+        },
+        setIsPostCreated(state) {
+            state.isPostCreated = true;
+            state.loading = false
+        },
+        clearIsPostCreated(state) {
+            state.isPostCreated = false
+        }
     }
 })
 

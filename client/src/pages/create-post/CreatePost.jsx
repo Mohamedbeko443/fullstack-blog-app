@@ -1,14 +1,20 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./create-post.css";
 import {toast } from "react-toastify"
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createPost } from "../../redux/apiCalls/postsApiCall";
 
 
 export default function CreatePost() {
-
     const [title , setTitle] = useState("");
     const [des , setDes] = useState("");
     const [category , setCategory] = useState("");
     const [file , setFile] = useState(null);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { loading , isPostCreated } = useSelector(store => store.post);
 
 
     function handleSubmit(e) {
@@ -25,12 +31,16 @@ export default function CreatePost() {
       formData.append("title" , title);
       formData.append("description" , des);
       formData.append("category" , category);
-      
-      // send form data to server
 
-      console.log({title , des , category , file});
+      dispatch(createPost(formData));
     }
 
+    useEffect(() => {
+      if(isPostCreated)
+      {
+        navigate("/");
+      }
+    } , [navigate , isPostCreated]);
 
   return (
     <section className=' create-post'>
@@ -72,7 +82,7 @@ export default function CreatePost() {
           onChange={(e) => setFile(e.target.files[0])}
           />
 
-          <button type="submit" className='create-post-btn'> Create</button>
+          <button type="submit" disabled={loading} className='create-post-btn'> {loading ? "loading...": "Create"}</button>
 
     </form>
 

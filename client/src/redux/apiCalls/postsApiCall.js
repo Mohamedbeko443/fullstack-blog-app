@@ -5,9 +5,6 @@ import { postActions } from "../slices/postSlice"
 
 
 
-
-
-
 // get paginated posts
 export function fetchPosts(page) {
     return async (dispatch) => {
@@ -50,3 +47,30 @@ export function fetchPostsPerCat(category) {
         }
     }
 }
+
+
+// create post
+export function createPost(newPost) {
+    return async (dispatch , getState) => {
+        try{
+            dispatch(postActions.setLoading());
+            await request.post("/api/posts" , newPost , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token,
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            dispatch(postActions.setIsPostCreated());
+            setTimeout(() => dispatch(postActions.clearIsPostCreated()) , 2000);
+            console.log("post created");
+            
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+            dispatch(postActions.clearLoading());
+        }
+    }
+}
+
+

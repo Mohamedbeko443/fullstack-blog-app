@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import "./update-post.css"
 import { CircleX } from 'lucide-react';
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../../redux/apiCalls/postsApiCall";
 
 
 export default function UpdatePostModal({ setOpen, post }) {
     const [title, setTitle] = useState(post.title);
     const [category, setCategory] = useState(post.category);
     const [des, setDes] = useState(post.description);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -33,8 +36,8 @@ export default function UpdatePostModal({ setOpen, post }) {
         if (!category.trim()) return toast.error("category  is required!");
         if (!des.trim()) return toast.error("description  is required!");
 
-        console.log({title , category , des});
-
+        dispatch(updatePost({title , category , description: des} , post?._id));
+        setOpen(false);
     }
 
 

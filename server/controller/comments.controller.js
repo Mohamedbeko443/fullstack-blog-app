@@ -57,7 +57,7 @@ const deleteComment = asyncHandler(async (req , res) => {
         return res.status(404).json({message: "Comment NOT found!"});
     }
 
-    if(req.user.idAdmin || req.user.id === comment.user.toString())
+    if(req.user.isAdmin || req.user.id === comment.user.toString())
     {
         await Comment.findByIdAndDelete(req.params.id);
         return res.status(200).json({message: "comment has been deleted successfully."});

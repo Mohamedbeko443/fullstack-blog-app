@@ -89,7 +89,7 @@ const getUsersCount = asyncHandler(async (req , res) => {
 /**
  * @desc    profile photo upload
  * @route   /api/users/profile/profile-photo-upload
- * @method  GET
+ * @method  POST
  * @access  private (only logged in users)
  */
 const profilePhotoUpload = asyncHandler(async (req,res) => {

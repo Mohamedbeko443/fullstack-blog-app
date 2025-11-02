@@ -104,3 +104,62 @@ export function toggleLikePost(id) {
         }
     }
 }
+
+// update post image
+export function updatePostImage(newImage , postId) {
+    return async (dispatch , getState) => {
+        try{
+                await request.put(`/api/posts/upload-image/${postId}` , newImage , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token,
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            toast.success("post image has been updated successfully.");
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}
+
+
+// update post 
+export function updatePost(newPost , postId) {
+    return async (dispatch , getState) => {
+        try{
+                const{ data } = await request.put(`/api/posts/${postId}` , newPost , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token,
+                }
+            });
+            dispatch(postActions.setPost(data));
+            toast.success("your post has been updated successfully.");
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}
+
+
+// delete post
+export function deletePost( postId ) {
+    return async (dispatch , getState) => {
+        try{
+                const { data } = await request.delete(`/api/posts/${postId}`  , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token,
+                }
+            });
+            dispatch(postActions.deletePost(postId));
+            toast.success("your post has been deleted successfully.");
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}

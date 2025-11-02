@@ -40,6 +40,10 @@ const profileSlice = createSlice({
         },
         setLike(state , action) {
             state.post.likes = action.payload.likes;
+        },
+        deletePost(state  , action) {
+            const id = action.payload;
+            state.posts = state.posts.filter(post => post._id !== id);
         }
     }
 })

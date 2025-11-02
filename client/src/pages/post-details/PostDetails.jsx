@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { ThumbsUp, Pencil, Trash2, Image } from 'lucide-react';
 import "./post-details.css"
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 import UpdatePostModal from './UpdatePostModal';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostsById, toggleLikePost } from "../../redux/apiCalls/postsApiCall";
+import { deletePost, fetchPostsById, toggleLikePost, updatePostImage } from "../../redux/apiCalls/postsApiCall";
 
 
 export default function PostDetails() {
@@ -19,6 +19,7 @@ export default function PostDetails() {
     const dispatch = useDispatch();
     const { post } = useSelector(store => store.post);
     const { user } = useSelector(store => store.auth);
+    const navigate = useNavigate();
 
 
 
@@ -30,19 +31,18 @@ export default function PostDetails() {
 
     function handleSubmit(e) {
         e.preventDefault();
-
-
         if (!file) return toast.warning("there is NO file")
+        const formData = new FormData();
+        formData.append("image" , file);
 
-
-        alert("image uploaded successfully")
+        dispatch(updatePostImage(formData , post?._id));
     }
 
 
     function deletePostHandler() {
         Swal.fire({
             title: "Are you sure",
-            text: "once deleted, you will not be able to recover this",
+            text: "once deleted, you will not be able to recover this post!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -50,11 +50,8 @@ export default function PostDetails() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Post has been deleted.',
-                    'success'
-                );
+                dispatch(deletePost(post?._id));
+                navigate(`/profile/${user?._id}`);
             }
         })
     }

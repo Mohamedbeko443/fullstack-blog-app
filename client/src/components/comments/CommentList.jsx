@@ -4,16 +4,25 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import UpdateCommentModal from './UpdateCommentModal';
 import { formatDistanceToNow } from 'date-fns';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteComment } from "../../redux/apiCalls/commentApiCall";
 
 export default function CommentList({ comments }) {
     const [open, setOpen] = useState(false);
+    const [updatedComment , setUpdatedComment] = useState(null);
     const { user } = useSelector(store => store.auth);
+    const dispatch = useDispatch();
 
-    function deleteCommentHandler() {
+
+    function handleUpdateComment(comment) {
+        setUpdatedComment(comment);
+        setOpen(true);
+    }
+
+    function deleteCommentHandler(id) {
         Swal.fire({
             title: "Are you sure",
-            text: "once deleted, you will not be able to recover this",
+            text: "once deleted, you will not be able to recover this comment",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -21,11 +30,7 @@ export default function CommentList({ comments }) {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Comment has been deleted.',
-                    'success'
-                );
+                dispatch(deleteComment(id));
             }
         })
     }
@@ -51,14 +56,14 @@ export default function CommentList({ comments }) {
                     {
                         user?._id === comment?.user && (
                             <div className="comment-item-icon-wrapper">
-                                <Pencil onClick={() => setOpen(true)} cursor={"pointer"} color="yellowgreen" />
-                                <Trash2 onClick={deleteCommentHandler} color="red" cursor={"pointer"} />
+                                <Pencil onClick={() => handleUpdateComment(comment)} cursor={"pointer"} color="yellowgreen" />
+                                <Trash2 onClick={() => deleteCommentHandler(comment?._id)} color="red" cursor={"pointer"} />
                             </div>
                         )
                     }
                 </div>
             ))}
-            {open && <UpdateCommentModal setOpen={setOpen} />}
+            {open && <UpdateCommentModal  commentForUpdate={updatedComment} setOpen={setOpen} />}
         </div>
     )
 }

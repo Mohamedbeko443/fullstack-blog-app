@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import "./update-comment.css"
 import { CircleX } from 'lucide-react';
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateComment } from "../../redux/apiCalls/commentApiCall";
 
 
-export default function UpdateCommentModal({ setOpen }) {
-
-    const [text, setText] = useState("this is so great");
+export default function UpdateCommentModal({ setOpen , commentForUpdate}) {
+    const [text, setText] = useState(commentForUpdate?.text);
+    const dispatch = useDispatch();
+    console.log(text);
 
     useEffect(() => {
         function handleCloseEvent(e) {
@@ -30,9 +33,8 @@ export default function UpdateCommentModal({ setOpen }) {
 
         if (!text.trim()) return toast.error("comment can not be empty!");
 
-
-        console.log({ text });
-
+        dispatch(updateComment(  { text } , commentForUpdate?._id));
+        setOpen(false);
     }
 
 

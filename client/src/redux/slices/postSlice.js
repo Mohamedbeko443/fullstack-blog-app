@@ -44,6 +44,15 @@ const profileSlice = createSlice({
         deletePost(state  , action) {
             const id = action.payload;
             state.posts = state.posts.filter(post => post._id !== id);
+        },
+        addCommentToPost(state , action) {
+            state.post.comments.push(action.payload);
+        },
+        updateCommentPost(state , action){
+            state.post.comments = state.post.comments.map(comment =>  comment._id === action.payload._id ? action.payload : comment )
+        },
+        deleteCommentFromPost(state , action) {
+            state.post.comments = state.post.comments.filter(comment => comment._id !== action.payload);
         }
     }
 })

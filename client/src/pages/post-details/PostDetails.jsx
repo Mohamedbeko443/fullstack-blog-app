@@ -106,7 +106,7 @@ export default function PostDetails() {
                 )}
             </div>
 
-            <AddComment />
+            {user && <AddComment postId={post?._id} />}
             <CommentList comments={post?.comments} />
 
             {open && <UpdatePostModal post={post} setOpen={setOpen} />}

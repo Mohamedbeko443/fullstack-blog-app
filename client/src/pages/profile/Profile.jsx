@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import UpdateProfileModal from './UpdateProfileModal';
 import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile, uploadProfilePhoto } from "../../redux/apiCalls/profileApiCall";
-import { useParams } from "react-router-dom";
+import { deleteProfile, getUserProfile, uploadProfilePhoto } from "../../redux/apiCalls/profileApiCall";
+import { useNavigate, useParams } from "react-router-dom";
 import PostItem from "../../components/posts/PostItem";
+import { logoutUser } from './../../redux/apiCalls/authApiCall';
 
 
 
@@ -16,8 +17,9 @@ export default function Profile() {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
     const { id } = useParams();
-    const { profile } = useSelector(store => store.profile);
+    const { profile , loading , isProfileDeleted } = useSelector(store => store.profile);
     const { user } = useSelector(store => store.auth);
+    const navigate = useNavigate();
 
 
     function handleSubmit(e) {
@@ -48,14 +50,16 @@ export default function Profile() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Post has been deleted.',
-                    'success'
-                );
+                dispatch(deleteProfile(user?._id));
+                dispatch(logoutUser());
             }
         })
     }
+
+
+    useEffect(()=> {
+        if(isProfileDeleted)  navigate("/");
+    },[isProfileDeleted , navigate])
 
     return (
         <section className="profile">
@@ -100,7 +104,7 @@ export default function Profile() {
             </div>
             {
                 user?._id === profile?._id && (
-                    <button onClick={handleDeleteAccount} className="delete-account-btn" > Delete Account </button>
+                    <button onClick={handleDeleteAccount} className="delete-account-btn" > {loading ? "loading..." : "Delete Account"} </button>
                 )
             }
 

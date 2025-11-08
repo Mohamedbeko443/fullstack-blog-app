@@ -71,3 +71,27 @@ export function updateProfile(userId , profile) {
     }
 }
 
+
+// delete profile
+export function deleteProfile(userId) {
+    return async (dispatch , getState) => {
+        try{
+            dispatch(profileActions.setLoading());
+            const state = getState();
+            const { data } = await request.delete(`/api/users/profile/${userId}`  , {
+                headers: {
+                    Authorization: "Bearer " + state.auth.user.token,
+                }
+            });
+            dispatch(profileActions.setIsProfileDeleted());
+            toast.success(data?.message || "your profile has been deleted successfully.");
+            setTimeout(() => dispatch(profileActions.clearIsProfileDeleted()), 5000);
+        } 
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+            dispatch(profileActions.clearIsProfileDeleted());
+        }
+    }
+}
+

@@ -1,13 +1,22 @@
+import { useDispatch, useSelector } from "react-redux";
 import "./admin-table.css"
 import AdminSidebar from './AdminSidebar';
 import Swal from "sweetalert2";
+import { useEffect } from "react";
+import { deleteComment, fetchAllComments } from "../../redux/apiCalls/commentApiCall";
 
 
 
 export default function CommentsTable() {
+    const dispatch = useDispatch();
+    const { comments } = useSelector(store => store.comment);
 
 
-    function deleteCommentHandler() {
+    useEffect(() => {
+        dispatch(fetchAllComments());
+    }, [dispatch])
+
+    function deleteCommentHandler(commentId) {
         Swal.fire({
             title: "Are you sure",
             text: "once deleted, you will not be able to recover this account ",
@@ -18,11 +27,7 @@ export default function CommentsTable() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Comment has been deleted.',
-                    'success'
-                );
+                dispatch(deleteComment(commentId));
             }
         })
     }
@@ -44,19 +49,19 @@ export default function CommentsTable() {
                     </thead>
 
                     <tbody>
-                        {[1, 2, 3, 4].map((item) => (
-                            <tr key={item} >
-                                <td> {item} </td>
+                        {comments.map((item , index) => (
+                            <tr key={item?._id} >
+                                <td> {index + 1} </td>
                                 <td>
                                     <div className="table-image">
-                                        <img className="table-user-image" src="/images/user-avatar.png" alt="fasdf" />
-                                        <span className="table-username" > Lionel</span>
+                                        <img className="table-user-image" src={item?.user?.profilePhoto?.url} alt="profile img" />
+                                        <span className="table-username" > {item?.user?.username}</span>
                                     </div>
                                 </td>
-                                <td> thank you for this man  </td>
+                                <td> { item?.text }  </td>
                                 <td>
                                     <div className="table-button-group">
-                                        <button onClick={deleteCommentHandler} >Delete Comment</button>
+                                        <button onClick={() => deleteCommentHandler(item?._id)} >Delete Comment</button>
                                     </div>
                                 </td>
                             </tr>

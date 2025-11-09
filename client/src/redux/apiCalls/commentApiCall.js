@@ -1,5 +1,6 @@
 import request from "../../utils/request";
 import { postActions } from "../slices/postSlice";
+import { commentActions } from "../slices/commentSlice"
 import { toast } from 'react-toastify';
 
 
@@ -50,7 +51,28 @@ export function deleteComment(commentId) {
                     Authorization: "Bearer " + getState().auth.user.token
                 }
             });
+                dispatch(commentActions.deleteComment(commentId));
                 dispatch(postActions.deleteCommentFromPost(commentId));
+            }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong!");
+            console.log(err);
+        }
+    }
+}
+
+// get all comments
+export function fetchAllComments() {
+    return async (dispatch , getState) => {
+        try{
+            const { data } = await request.get("/api/comments/"  , {
+                headers: {
+                    Authorization: "Bearer " + getState().auth.user.token
+                }
+            });
+                dispatch(commentActions.setComment(data));
+                toast.success("comment deleted successfully.");
+                console.log("done");
             }
         catch(err){
             toast.error(err?.response?.data?.message || "something went wrong!");

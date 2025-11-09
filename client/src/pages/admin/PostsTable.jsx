@@ -49,7 +49,7 @@ export default function PostsTable() {
                     </thead>
 
                     <tbody>
-                        {posts.map((post, index) => (
+                        {posts?.map((post, index) => (
                             <tr key={post?._id} >
                                 <td> {index + 1} </td>
                                 <td>

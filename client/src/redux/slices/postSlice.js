@@ -7,25 +7,25 @@ const profileSlice = createSlice({
         posts: [],
         postsCount: null,
         postsCate: [],
-        loading: false , 
+        loading: false,
         isPostCreated: false,
         post: null
     },
-    
+
     reducers: {
-        setPosts(state , action) {
+        setPosts(state, action) {
             state.posts = action.payload
         },
-        setPostsCount(state , action) {
+        setPostsCount(state, action) {
             state.postsCount = action.payload
         },
-        setPostsCate(state , action) {
+        setPostsCate(state, action) {
             state.postsCate = action.payload
         },
-        setLoading(state){
+        setLoading(state) {
             state.loading = true
         },
-        clearLoading(state){
+        clearLoading(state) {
             state.loading = false;
         },
         setIsPostCreated(state) {
@@ -35,32 +35,34 @@ const profileSlice = createSlice({
         clearIsPostCreated(state) {
             state.isPostCreated = false
         },
-        setPost(state , action) {
+        setPost(state, action) {
             state.post = action.payload;
         },
-        setLike(state , action) {
+        setLike(state, action) {
             state.post.likes = action.payload.likes;
         },
-        deletePost(state  , action) {
+        deletePost(state, action) {
             const id = action.payload;
             state.posts = state.posts.filter(post => post._id !== id);
         },
-        addCommentToPost(state , action) {
+        addCommentToPost(state, action) {
             state.post.comments.push(action.payload);
         },
-        updateCommentPost(state , action){
-            state.post.comments = state.post.comments.map(comment =>  comment._id === action.payload._id ? action.payload : comment )
+        updateCommentPost(state, action) {
+            state.post.comments = state.post.comments.map(comment => comment._id === action.payload._id ? action.payload : comment)
         },
-        deleteCommentFromPost(state , action) {
-            state.post.comments = state.post.comments.filter(comment => comment._id !== action.payload);
+        deleteCommentFromPost(state, action) {
+            if (state.post && state.post.comments) {
+                state.post.comments = state.post.comments.filter(comment => comment._id !== action.payload);
+            }
         }
     }
 })
 
 
 
-const postReducer = profileSlice.reducer ;
+const postReducer = profileSlice.reducer;
 const postActions = profileSlice.actions;
 
 
-export { postActions , postReducer }
+export { postActions, postReducer }

@@ -2,14 +2,21 @@ import { Link } from "react-router-dom";
 import "./admin-table.css"
 import AdminSidebar from './AdminSidebar';
 import Swal from "sweetalert2";
-import { posts } from "../../dummyData"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { deletePost, fetchAllPosts } from "../../redux/apiCalls/postsApiCall";
 
 
 
 export default function PostsTable() {
+    const dispatch = useDispatch();
+    const { posts } = useSelector(store => store.post);
 
+    useEffect(() => {
+        dispatch(fetchAllPosts());
+    },[dispatch]);
 
-    function deletePostHandler() {
+    function deletePostHandler(postId) {
         Swal.fire({
             title: "Are you sure",
             text: "once deleted, you will not be able to recover this account ",
@@ -20,11 +27,7 @@ export default function PostsTable() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Post has been deleted.',
-                    'success'
-                );
+                dispatch(deletePost(postId));
             }
         })
     }
@@ -47,23 +50,23 @@ export default function PostsTable() {
 
                     <tbody>
                         {posts.map((post, index) => (
-                            <tr key={post._id} >
+                            <tr key={post?._id} >
                                 <td> {index + 1} </td>
                                 <td>
                                     <div className="table-image">
-                                        <img className="table-user-image" src="/images/user-avatar.png" alt="fasdf" />
-                                        <span className="table-username" > {post.user.username}</span>
+                                        <img className="table-user-image" src={post?.user?.profilePhoto?.url} alt="profile img" />
+                                        <span className="table-username" > {post?.user?.username}</span>
                                     </div>
                                 </td>
-                                <td> {post.title} </td>
+                                <td> {post?.title} </td>
                                 <td>
                                     <div className="table-button-group">
                                         <button>
-                                            <Link className="table-action-link" to={`/posts/details/${post._id}`}>
+                                            <Link className="table-action-link" to={`/posts/details/${post?._id}`}>
                                                 View Post
                                             </Link>
                                         </button>
-                                        <button onClick={deletePostHandler} >Delete Post</button>
+                                        <button onClick={() => deletePostHandler(post?._id)} >Delete Post</button>
                                     </div>
                                 </td>
                             </tr>

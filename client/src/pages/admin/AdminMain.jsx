@@ -5,16 +5,19 @@ import AddCategoryForm from './AddCategoryForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../redux/apiCalls/categoryApiCall';
 import { getUsersCount } from '../../redux/apiCalls/profileApiCall';
+import { fetchPostsCount } from '../../redux/apiCalls/postsApiCall';
 
 
 export default function AdminMain() {
   const dispatch = useDispatch();
   const { categories } = useSelector(store => store.category);
   const { usersCount } = useSelector(store => store.profile);
+  const { postsCount } = useSelector(store => store.post);
 
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(getUsersCount());
+    dispatch(fetchPostsCount());
   },[dispatch])
 
   return (
@@ -31,7 +34,7 @@ export default function AdminMain() {
 
         <div className="admin-main-card">
           <h5 className='admin-card-title'>Posts</h5>
-          <div className="admin-card-count">210</div>
+          <div className="admin-card-count">{postsCount}</div>
           <div className="admin-card-link-wrapper">
             <Link className='admin-card-link' to={"/admin-dashboard/posts-table"}> See All Posts </Link>
             <div className="admin-card-icon">   <FileChartColumn /> </div>

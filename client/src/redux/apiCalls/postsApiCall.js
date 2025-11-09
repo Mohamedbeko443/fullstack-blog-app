@@ -163,3 +163,18 @@ export function deletePost( postId ) {
         }
     }
 }
+
+
+// get all posts
+export function fetchAllPosts() {
+    return async (dispatch) => {
+        try{
+            const { data } = await request.get("/api/posts");
+            dispatch(postActions.setPosts(data));
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}

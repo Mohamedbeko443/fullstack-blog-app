@@ -67,7 +67,7 @@ const updateUser = asyncHandler(async (req , res) =>{
             password: req.body.password,
             bio: req.body.bio
         }
-    },{new: true}).select("-password -__v");
+    },{new: true}).select("-password -__v").populate("posts")  ;
 
     res.status(200).json(updatedUser);
 

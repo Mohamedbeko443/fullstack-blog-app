@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { LayoutDashboard , Users , FileChartColumn , Tags , MessageCircleMore    } from 'lucide-react';
 import AddCategoryForm from './AddCategoryForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../redux/apiCalls/categoryApiCall';
 
 
 export default function AdminMain() {
+  const dispatch = useDispatch();
+  const { categories } = useSelector(store => store.category);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  },[dispatch])
+
   return (
     <div className='admin-main'>
       <div className="admin-main-header">
@@ -28,7 +37,7 @@ export default function AdminMain() {
 
         <div className="admin-main-card">
           <h5 className='admin-card-title'>Categories</h5>
-          <div className="admin-card-count">10</div>
+          <div className="admin-card-count">{categories.length}</div>
           <div className="admin-card-link-wrapper">
             <Link className='admin-card-link' to={"/admin-dashboard/categories-table"}> See All Categories </Link>
             <div className="admin-card-icon">   <Tags /> </div>

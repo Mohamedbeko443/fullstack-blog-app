@@ -95,3 +95,41 @@ export function deleteProfile(userId) {
     }
 }
 
+// get users count
+export function getUsersCount() {
+    return async (dispatch , getState) => {
+        try{
+            const state = getState();
+            const { data } = await request.get("/api/users/count"  , {
+                headers: {
+                    Authorization: "Bearer " + state.auth.user.token,
+                }
+            });
+            dispatch(profileActions.setUsersCount(data));
+        } 
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}
+
+// get users profile
+export function getUsersProfile() {
+    return async (dispatch , getState) => {
+        try{
+            const state = getState();
+            const { data } = await request.get("/api/users/profile"  , {
+                headers: {
+                    Authorization: "Bearer " + state.auth.user.token,
+                }
+            });
+            dispatch(profileActions.setProfiles(data));
+        } 
+        catch(err){
+            toast.error(err?.response?.data?.message || "something went wrong.");
+            console.log(err);
+        }
+    }
+}
+

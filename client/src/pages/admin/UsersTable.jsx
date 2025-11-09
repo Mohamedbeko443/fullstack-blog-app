@@ -2,14 +2,23 @@ import { Link } from "react-router-dom";
 import "./admin-table.css"
 import AdminSidebar from './AdminSidebar';
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { deleteProfile, getUsersProfile } from "../../redux/apiCalls/profileApiCall";
 
 
 
 
 export default function UsersTable() {
+    const dispatch = useDispatch();
+    const { profiles , isProfileDeleted } = useSelector(store => store.profile);
 
 
-    function deleteUserHandler() {
+    useEffect(() => {
+        dispatch(getUsersProfile());
+    }, [dispatch , isProfileDeleted])
+
+    function deleteUserHandler(userId) {
         Swal.fire({
             title: "Are you sure",
             text: "once deleted, you will not be able to recover this account ",
@@ -20,11 +29,7 @@ export default function UsersTable() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'User has been deleted.',
-                    'success'
-                );
+               dispatch(deleteProfile(userId))
             }
         })
     }
@@ -46,24 +51,24 @@ export default function UsersTable() {
                     </thead>
 
                     <tbody>
-                        {[1, 2, 3, 4, 5].map(item => (
-                            <tr key={item} >
-                                <td> {item} </td>
+                        {profiles?.map((item , index) => (
+                            <tr key={item?._id} >
+                                <td> {index + 1} </td>
                                 <td>
                                     <div className="table-image">
-                                        <img className="table-user-image" src="/images/user-avatar.png" alt="fasdf" />
-                                        <span className="table-username" > Lionel</span>
+                                        <img className="table-user-image" src={item?.profilePhoto?.url} alt="profile img" />
+                                        <span className="table-username" > {item?.username}</span>
                                     </div>
                                 </td>
-                                <td> mo@gmail.com </td>
+                                <td> {item?.email} </td>
                                 <td>
                                     <div className="table-button-group">
                                         <button>
-                                            <Link className="table-action-link" to={`/profile/1`}>
+                                            <Link className="table-action-link" to={`/profile/${item?._id}`}>
                                                 View Profile
                                             </Link>
                                         </button>
-                                        <button onClick={deleteUserHandler} >Delete User</button>
+                                        <button onClick={() => deleteUserHandler(item?._id)} >Delete User</button>
                                     </div>
                                 </td>
                             </tr>

@@ -4,14 +4,17 @@ import { LayoutDashboard , Users , FileChartColumn , Tags , MessageCircleMore   
 import AddCategoryForm from './AddCategoryForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../redux/apiCalls/categoryApiCall';
+import { getUsersCount } from '../../redux/apiCalls/profileApiCall';
 
 
 export default function AdminMain() {
   const dispatch = useDispatch();
   const { categories } = useSelector(store => store.category);
+  const { usersCount } = useSelector(store => store.profile);
 
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(getUsersCount());
   },[dispatch])
 
   return (
@@ -19,7 +22,7 @@ export default function AdminMain() {
       <div className="admin-main-header">
         <div className="admin-main-card">
           <h5 className='admin-card-title'>Users</h5>
-          <div className="admin-card-count">120</div>
+          <div className="admin-card-count">{usersCount?.count}</div>
           <div className="admin-card-link-wrapper">
             <Link className='admin-card-link' to={"/admin-dashboard/users-table"}> See All Users </Link>
             <div className="admin-card-icon">   <Users /> </div>

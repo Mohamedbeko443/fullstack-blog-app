@@ -19,6 +19,7 @@ import ForgotPassword from './pages/forms/ForgotPassword';
 import ResetPassword from './pages/forms/ResetPassword';
 import NotFound from './pages/not-found/NotFound';
 import { useSelector } from "react-redux";
+import VerifyEmail from "./pages/verify-email/VerifyEmail";
 
 
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/register" element={!user ? <Register /> : <Navigate to={'/'} replace />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/users/:userId/verify/:token" element={!user ? <VerifyEmail/>  : <Navigate to={"/"} replace /> } />
 
 
         <Route path="/profile/:id" element={<Profile />} />

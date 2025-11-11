@@ -47,7 +47,7 @@ const registerUser = asyncHandler( async (req , res)=>{
     await verificationToken.save();
 
     // make link
-    const link = `http://localhost:5173/users/${user._id}/verify/${verificationToken.token}`
+    const link = `${process.env.CLINT_DOMAIN}/users/${user._id}/verify/${verificationToken.token}`
     // attach the link into an html template
     const template = `
         <div>
@@ -90,7 +90,7 @@ const loginUser = asyncHandler(async (req ,res) => {
 
     if(!user.isAccountVerified)
     {
-        
+
         return res.status(400).json({message: "please verify your account to login "});
     }
 

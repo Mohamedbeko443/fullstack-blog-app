@@ -15,7 +15,7 @@ module.exports = async (userEmail , subject , template) => {
         });
 
         mailOptions = {
-            from: " your Gmail",
+            from: process.env.APP_EMAIL_ADDRESS,
             to: userEmail,
             subject: subject,
             html: template
@@ -29,4 +29,4 @@ module.exports = async (userEmail , subject , template) => {
         throw new Error("Internal server error (nodemailer)")
         console.log(err);
     }
-}
+}  

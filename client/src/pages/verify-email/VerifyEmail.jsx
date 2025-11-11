@@ -1,10 +1,23 @@
 import "./verify-email.css";
 import { BadgeCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from "react";
+import { verifyEmail } from "../../redux/apiCalls/authApiCall";
 
 
 export default function VerifyEmail() {
-    const isEmailVerified = true;
+    const dispatch = useDispatch();
+    const { isEmailVerified } = useSelector(store => store.auth);
+    const { userId , token } = useParams();
+
+    useEffect(() => {
+        dispatch(verifyEmail(userId ,  token))
+    },[dispatch , token , userId]);
+    
+
+    
+
     return (
         <section className='verify-email'>
             {

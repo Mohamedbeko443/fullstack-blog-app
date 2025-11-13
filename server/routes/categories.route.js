@@ -8,7 +8,7 @@ const router = require("express").Router();
 
 
 router.route("/")
-    .post(verifyAdmins , createCategory)
+    .post(verifyAdmins  ,   createCategory)
     .get(getAllCategories)
 
 

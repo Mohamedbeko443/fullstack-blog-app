@@ -3,6 +3,7 @@ const connectToDb = require("./config/db");
 const { errorHandler, notFound } = require("./middlewares/error");
 const cors = require("cors");
 require("dotenv").config();
+const { xss } = require("express-xss-sanitizer");
 
 // db connection 
 connectToDb();
@@ -11,11 +12,13 @@ connectToDb();
 const app = express();
 
 
-
+const options = {
+    allowedTags: [null]
+}
 
 // middlewares
 app.use(express.json());
-
+app.use(xss(options));
 
 // CORS policy
 app.use(cors({

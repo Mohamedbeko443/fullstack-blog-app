@@ -9,8 +9,8 @@ router.post("/reset-password-link" , sendResetPasswordLink)
 
 
 // /api/password/reset-password/:userId/:token
-    router.route("/:userId/:token")
-        .get(getPasswordLink)
-        .post(resetPassword)
+router.route("/reset-password/:userId/:token")
+    .get(getPasswordLink)
+    .post(resetPassword)
 
 module.exports = router;

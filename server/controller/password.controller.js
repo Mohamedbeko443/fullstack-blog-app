@@ -37,6 +37,9 @@ module.exports.sendResetPasswordLink = asyncHandler(async (req , res) => {
             token: crypto.randomBytes(32).toString("hex")
         })
     }
+
+    await verificationToken.save();
+
     // create link 
     const link = `${process.env.CLINT_DOMAIN}/reset-password/${user._id}/${verificationToken.token}`
     // create html template 

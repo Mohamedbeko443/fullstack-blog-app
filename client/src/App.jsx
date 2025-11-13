@@ -36,7 +36,7 @@ function App() {
         <Route path="/login" element={!user ? <Login /> : <Navigate to={'/'} replace />} />
         <Route path="/register" element={!user ? <Register /> : <Navigate to={'/'} replace />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-password/:userId/:token" element={<ResetPassword />} />
         <Route path="/users/:userId/verify/:token" element={!user ? <VerifyEmail/>  : <Navigate to={"/"} replace /> } />
 
 

@@ -4,6 +4,7 @@ const { errorHandler, notFound } = require("./middlewares/error");
 const cors = require("cors");
 require("dotenv").config();
 const { xss } = require("express-xss-sanitizer");
+const rateLimiting = require("express-rate-limit");
 
 // db connection 
 connectToDb();
@@ -18,7 +19,16 @@ const options = {
 
 // middlewares
 app.use(express.json());
+
+// prevent xss attacks
 app.use(xss(options));
+
+// rate limiting
+app.use(rateLimiting({
+    windowMs: 10 * 60 * 1000, // 10 mins
+    max: 200
+}))
+
 
 // CORS policy
 app.use(cors({

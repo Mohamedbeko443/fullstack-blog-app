@@ -19,6 +19,8 @@
     "express-async-handler": "^1.2.0",
     "express-rate-limit": "^8.2.1",
     "express-xss-sanitizer": "^2.0.1",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
     "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.2",

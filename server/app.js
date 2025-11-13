@@ -5,6 +5,8 @@ const cors = require("cors");
 require("dotenv").config();
 const { xss } = require("express-xss-sanitizer");
 const rateLimiting = require("express-rate-limit");
+const helmet = require("helmet");
+const hpp = require("hpp");
 
 // db connection 
 connectToDb();
@@ -19,6 +21,12 @@ const options = {
 
 // middlewares
 app.use(express.json());
+
+// security headers (helmet)
+app.use(helmet());
+
+// prevent http param pollution
+app.use(hpp());
 
 // prevent xss attacks
 app.use(xss(options));

@@ -8,9 +8,6 @@ const rateLimiting = require("express-rate-limit");
 const helmet = require("helmet");
 const hpp = require("hpp");
 
-// db connection 
-connectToDb();
-
 // init app
 const app = express();
 
@@ -59,6 +56,13 @@ app.use(notFound)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT , ()=>{
-    console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-});
+
+// Connect to DB and start server
+async function startServer() {
+    await connectToDb();
+    app.listen(PORT , ()=>{
+        console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+    });
+}
+
+startServer();

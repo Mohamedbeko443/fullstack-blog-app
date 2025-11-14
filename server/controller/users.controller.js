@@ -7,6 +7,9 @@ const fs = require("fs");
 const { Comment } = require("../models/Comment");
 const { Post } = require("../models/Post");
 
+// Get the images directory path (relative to server root)
+const imagesDir = path.join(__dirname, "../images");
+
 
 
 
@@ -100,7 +103,7 @@ const profilePhotoUpload = asyncHandler(async (req,res) => {
     }
 
     // get the path to the image
-    const imagePath = path.join(__dirname, `../../images/${req.file.filename}`); 
+    const imagePath = path.join(imagesDir, req.file.filename);
 
     // upload cloudinary
     const result = await cloudinaryUploadImage(imagePath);

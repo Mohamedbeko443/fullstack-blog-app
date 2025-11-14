@@ -25,7 +25,7 @@ const createPost = asyncHandler(async (req , res) => {
         return res.status(400).json({message: error.details[0].message});
     }
     // upload photo
-    const imagePath = path.join(__dirname , `../images/${req.file.filename}`);
+    const imagePath = path.join(__dirname , `../../images/${req.file.filename}`);
     const result = await cloudinaryUploadImage(imagePath);
     // create new post and save to db
     const post = await Post.create({
@@ -213,7 +213,7 @@ const updatePostImage = asyncHandler(async (req , res) => {
         await cloudinaryRemoveImage(post.image.publicId);
 
         // upload the new image and save to db
-        const imagePath = path.join(__dirname , `../images/${req.file.filename}`);
+        const imagePath = path.join(__dirname , `../../images/${req.file.filename}`);
         const result = await cloudinaryUploadImage(imagePath);
 
         const updatedPost = await Post.findByIdAndUpdate(req.params.id , {

@@ -8,6 +8,8 @@ module.exports = async (userEmail , subject , template) => {
     try{
         const transporter = nodemailer.createTransport({
             service: "gmail",
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.APP_EMAIL_ADDRESS,
                 pass: process.env.APP_EMAIL_PASSWORD
@@ -26,7 +28,7 @@ module.exports = async (userEmail , subject , template) => {
 
     }
     catch (err){
-        throw new Error("Internal server error (nodemailer)")
         console.log(err);
+        throw new Error("Internal server error (nodemailer)")
     }
 }  

@@ -100,7 +100,7 @@ const profilePhotoUpload = asyncHandler(async (req,res) => {
     }
 
     // get the path to the image
-    const imagePath = path.join(__dirname, `../images/${req.file.filename}`); 
+    const imagePath = path.join(__dirname, `../../images/${req.file.filename}`); 
 
     // upload cloudinary
     const result = await cloudinaryUploadImage(imagePath);

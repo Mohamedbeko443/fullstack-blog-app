@@ -173,7 +173,8 @@ const updatePost = asyncHandler(async (req , res) => {
             description: req.body.description,
             category: req.body.category
         }
-    },{new: true}).populate("user" , ["-password"]);
+    },{new: true}).populate("user" , ["-password"])
+        .populate("comments");
 
     // send res to client
     return res.status(200).json(updatedPost);

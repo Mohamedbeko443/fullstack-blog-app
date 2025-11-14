@@ -8,7 +8,7 @@ const { Comment } = require("../models/Comment");
 const { Post } = require("../models/Post");
 
 // Get the images directory path (relative to server root)
-const imagesDir = path.join(__dirname, "../images");
+const imagesDir = path.join(__dirname, "../app/images");
 
 
 

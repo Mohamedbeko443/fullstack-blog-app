@@ -1,20 +1,25 @@
-const { Resend } = require('resend');
+const SibApiV3Sdk = require('@sendinblue/client');
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+apiInstance.setApiKey(
+    SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+    process.env.BREVO_API_KEY
+);
 
 module.exports = async (userEmail, subject, template) => {
     try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
+        const sendSmtpEmail = {
+            sender: { email: process.env.APP_EMAIL_ADDRESS },
+            to: [{ email: userEmail }],
+            subject,
+            htmlContent: template,
+        };
 
-        const data = await resend.emails.send({
-            from: 'Verify <onboarding@resend.dev>',
-            to: userEmail,
-            subject: subject,
-            html: template,
-        });
-
-        console.log("Email sent:", data);
-
-    } catch (err) {
-        console.log("Resend Error:", err);
-        throw new Error("Internal server error (email)");
+        const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log("Email sent:", response.messageId);
+    } catch (error) {
+        console.error("Brevo error:", error);
+        throw new Error("Failed to send email");
     }
-}
+};

@@ -55,6 +55,7 @@ const registerUser = asyncHandler( async (req , res)=>{
             <a href="${link}"> Verify</a>
         </div>
     `
+    console.log(link);
     // send email to user
     await sendEmail(user.email, "Verify Your Email" , template);
     // send response to client
